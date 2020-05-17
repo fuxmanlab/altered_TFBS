@@ -1,1 +1,1 @@
-# altered_TFFB
+# altered TF binding site database
