@@ -1,0 +1,37 @@
+# Change directory where scripts are located
+cd /path/to/py/scripts
+
+# Run the run_intersect_hadoop.sh script.
+
+# EXT is .bed or .vcf
+# The path to the sample_input.EXT and output.csv are on the regular SCC filesystem.
+run_intersect_hadoop.sh path/to/parquet_files sample_input.EXT output.csv
+
+
+# To run without the terminal staying open:
+nohup run_intersect_hadoop.sh path/to/parquet_files sample_input.EXT output.csv &
+
+
+# To see the list of running applications:
+yarn application -list
+
+
+
+# The TFBS parquet files are stored on the Hadoop filesystem in /project/cancergrp/tfbs/parquet_files
+
+
+
+
+
+#  To recreate the TFBS parquet files:
+# See the file: create_parquet.qsub
+# This can run on the SCC and will make the files on the SCC filesystem.
+# For performance they need to be re-partitioned which must happen on Hadoop.
+#
+# Copy to hadoop:
+hadoop fs -copyFromLocal /path/to/local/tfbs_parquet hdfs:///path/to/hadoop/parquet_files
+
+# Then on Hadoop run the repartition:
+run_repartition_hadoop.sh path/to/hadoop/parquet_files
+# which runs repartition_parquet.py and overwrites the files partitioned by their pwmid column.
+
